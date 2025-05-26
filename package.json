@@ -1,0 +1,33 @@
+{
+  "name": "twitter-clone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/mongodb-adapter": "^3.9.1",
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.9.0",
+    "javascript-time-ago": "^2.5.11",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.15.0",
+    "multiparty": "^4.2.3",
+    "next": "15.3.2",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-file-drop": "^3.1.6",
+    "react-flip-numbers": "^3.0.9",
+    "react-spinners": "^0.17.0",
+    "react-time-ago": "^7.3.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}
