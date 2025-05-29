@@ -39,13 +39,21 @@ export default async function handle(req, res) {
                     path: "parent",
                     populate: "author",
                 })
+
             const likedByMe = await Like.find({
-                author: session.user.id,
+                author: post.author,
                 post: post,
+            });
+
+            const parentLikedByMe = await Like.find({
+                author: session.user.id,
+                post: post.parent,
             })
 
             const idLikedByMe = likedByMe.map(like => like.post);
-            res.json({post, idLikedByMe});
+            const idParentLikedByMe = parentLikedByMe.map(like => like.post);
+
+            res.json({post, idLikedByMe, idParentLikedByMe});
         } else {
             const parent = req.query.parent || null;
             const author = req.query.author;
@@ -78,8 +86,15 @@ export default async function handle(req, res) {
                 post: posts.map(p => p._id),
             })
 
+            const parentPostsLikedByMe = await Like.find({
+                author: session.user.id,
+                post: posts.map(p => p.parent),
+            })
+
             const idsLikedByMe = postsLikedByMe.map(like => like.post);
-            res.json({posts, idsLikedByMe});
+            const idsParentLikedByMe = parentPostsLikedByMe.map(like => like.post);
+
+            res.json({posts, idsLikedByMe, idsParentLikedByMe});
         }
     }
 }

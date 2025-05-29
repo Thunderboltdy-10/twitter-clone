@@ -18,12 +18,14 @@ export default function PostPage() {
     const {userInfo} = useUserInfo();
 
     const [likedByMe, setLikedByMe] = useState();
+    const [parentLikedByMe, setParentLikedByMe] = useState();
 
     function fetchData() {
         axios.get("/api/posts?id=" + id)
             .then(response => {
                 setPost(response.data.post);
                 setLikedByMe(response.data.idLikedByMe.length > 0 ? true: false);
+                setParentLikedByMe(response.data.idParentLikedByMe.length > 0 ? true : false);
             })
         axios.get("/api/posts?parent=" + id)
             .then(response => {
@@ -45,11 +47,14 @@ export default function PostPage() {
                 <div className="px-5 py-2">
                     <TopNavLink />
                     {post.parent && (
-                        <div className="pb-1">
-                            <PostContent {...post.parent} />
-                            <div className="ml-5 h-12 relative">
-                                <div className="h-20 border-l-2 border-twitterBorder absolute -top-5"
-                                    style={{marginLeft: "2px"}}></div>
+                        <div className="">
+                            <div className="relative pb-10">
+                                <div
+                                    className="w-0.5 bg-twitterBorder absolute left-5 bottom-0"
+                                    style={{marginLeft: "2px", top: "45px"}}></div>
+                                <div className="">
+                                    <PostContent {...post.parent} likedByMe={parentLikedByMe}/>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -60,7 +65,7 @@ export default function PostPage() {
             )}
             {!!userInfo && (
                 <div className="border-t border-twitterBorder py-5">
-                    <PostForm onPost={fetchData} parent={id} compact placeholder={"Reply"} />
+                    <PostForm onPost={fetchData} parent={id} compact placeholder={"Tweet your reply"} />
                 </div>
             )}
             <div>

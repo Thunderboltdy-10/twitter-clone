@@ -11,13 +11,17 @@ import {useEffect, useState} from "react";
 export default function Home() {
     const {userInfo, setUserInfo, status: userInfoStatus} = useUserInfo();
     const [posts, setPosts] = useState([]);
+
     const [idsLikedByMe, setIdsLikedByMe] = useState([]);
+    const [idsParentLikedByMe, setIdsParentLikedByMe] = useState([]);
+
     const router = useRouter();
 
     function fetchHomePosts() {
         axios.get("/api/posts").then(response => {
             setPosts(response.data.posts);
             setIdsLikedByMe(response.data.idsLikedByMe);
+            setIdsParentLikedByMe(response.data.idsParentLikedByMe);
         })
     }
 
@@ -51,10 +55,14 @@ export default function Home() {
                 {posts.length > 0 && posts.map(post => (
                     <div key={post._id} className="border-t border-twitterBorder p-5">
                         {post.parent && (
-                            <div>
-                                <PostContent {...post.parent} />
-                                <div className="relative h-8">
-                                    <div className="border-l-2 border-twitterBorder h-10 absolute ml-6 -top-4"></div>
+                            <div className="">
+                                <div className="relative pb-10">
+                                    <div
+                                        className="w-0.5 bg-twitterBorder absolute left-5 bottom-0"
+                                        style={{marginLeft: "2px", top: "45px"}}></div>
+                                    <div className="">
+                                        <PostContent {...post.parent} likedByMe={idsParentLikedByMe.includes(post.parent._id)}/>
+                                    </div>
                                 </div>
                             </div>
                         )}

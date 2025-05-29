@@ -16,10 +16,13 @@ export default function UserPage() {
 
     const {userInfo} = useUserInfo();
     const [posts, setPosts] = useState([]);
-    const [postsLikedByMe, setPostsLikedByMe] = useState([]);
     const [editMode, setEditMode] = useState(false);
 
     const [isFollowing, setIsFollowing] = useState(false);
+
+    const [postsLikedByMe, setPostsLikedByMe] = useState([]);
+    const [parentPostsLikedByMe, setParentPostsLikedByMe] = useState([]);
+
 
     useEffect(() => {
         if (!username) {
@@ -43,6 +46,7 @@ export default function UserPage() {
             .then(response => {
                 setPosts(response.data.posts);
                 setPostsLikedByMe(response.data.idsLikedByMe);
+                setParentPostsLikedByMe(response.data.idsParentLikedByMe);
             })
     }, [profileInfo]);
 
@@ -161,8 +165,23 @@ export default function UserPage() {
             )}
             {posts?.length > 0 && posts.map(post => (
                 <div className="p-5 border-t border-twitterBorder" key={post._id}>
-                    <PostContent {...post} likedByMe={postsLikedByMe.includes(post._id)}/>
+                    {post.parent && (
+                        <div className="">
+                            <div className="relative pb-10">
+                                <div
+                                    className="w-0.5 bg-twitterBorder absolute left-5 bottom-0"
+                                    style={{marginLeft: "2px", top: "45px"}}></div>
+                                <div className="">
+                                    <PostContent {...post.parent} likedByMe={parentPostsLikedByMe.includes(post.parent._id)}/>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div>
+                        <PostContent {...post} likedByMe={postsLikedByMe.includes(post._id)}/>
+                    </div>
                 </div>
+                
             ))}
         </Layout>
     )
